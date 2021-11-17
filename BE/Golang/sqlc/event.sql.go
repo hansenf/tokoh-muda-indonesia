@@ -34,6 +34,8 @@ func (q *Queries) CreateEvent(ctx context.Context, arg CreateEventParams) error 
 }
 
 const deleteEvent = `-- name: DeleteEvent :exec
+;
+
 DELETE FROM event WHERE id = ?
 `
 
@@ -74,4 +76,27 @@ func (q *Queries) GetEvent(ctx context.Context) ([]Event, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateEvent = `-- name: UpdateEvent :exec
+UPDATE event SET judul_event=?, deskripsi_event=?, kriteria_event=?, tanggal_event=? WHERE id = ?
+`
+
+type UpdateEventParams struct {
+	JudulEvent     sql.NullString `json:"judul_event"`
+	DeskripsiEvent sql.NullString `json:"deskripsi_event"`
+	KriteriaEvent  sql.NullString `json:"kriteria_event"`
+	TanggalEvent   sql.NullString `json:"tanggal_event"`
+	ID             int32          `json:"id"`
+}
+
+func (q *Queries) UpdateEvent(ctx context.Context, arg UpdateEventParams) error {
+	_, err := q.db.ExecContext(ctx, updateEvent,
+		arg.JudulEvent,
+		arg.DeskripsiEvent,
+		arg.KriteriaEvent,
+		arg.TanggalEvent,
+		arg.ID,
+	)
+	return err
 }

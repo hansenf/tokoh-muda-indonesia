@@ -5,6 +5,9 @@ INSERT INTO event(
     ?,?,?,?
 );
 
+-- name: UpdateEvent :exec
+UPDATE event SET judul_event=?, deskripsi_event=?, kriteria_event=?, tanggal_event=? WHERE id = ?;;
+
 -- name: DeleteEvent :exec
 DELETE FROM event WHERE id = ?;
 
