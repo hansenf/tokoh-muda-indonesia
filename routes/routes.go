@@ -36,11 +36,19 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		"editor": "rahasia",
 	}))
 
+	// route mahasiswa
 	r.GET("/api/mahasiswa", controller.GetAllMahasiswa)
 	authorized.POST("/api/mahasiswa", controller.CreateMahasiswa)
 	r.GET("/api/mahasiswa/:id", controller.GetMahasiswaId)
 	authorized.PUT("/api/mahasiswa/:id", controller.UpdateMahasiswa)
 	authorized.DELETE("/api/mahasiswa/:id", controller.DeleteMahasiswa)
+
+	//route admin
+	r.GET("/api/admin", controller.GetAllAdmin)
+	authorized.POST("/api/admin", controller.CreateAdmin)
+	r.GET("/api/admin/:id", controller.GetAdminId)
+	authorized.PUT("/api/admin/:id", controller.UpdateAdmin)
+	authorized.DELETE("/api/admin/:id", controller.DeleteAdmin)
 
 	return r
 }
