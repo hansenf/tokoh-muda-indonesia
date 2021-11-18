@@ -10,21 +10,28 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/shopspring/decimal"
+	//"github.com/shopspring/decimal"
 )
 
 var db *gorm.DB
 var err error
 
-// Product is a representation of a product
-type Product struct {
-	ID    int             `form:"id" json:"id"`
-	Code  string          `form:"code" json:"code"`
-	Name  string          `form:"name" json:"name"`
-	Price decimal.Decimal `form:"price" json:"price" sql:"type:decimal(16,2);"`
+// Mahasiswa is a representation of a mahasiswa
+type Mahasiswa struct {
+	ID			int		`form:"id" json:"id"`
+	Username	string	`form:"username" json:"username"`
+	Password	string	`form:"password" json:"password"`
+	/* ID    		int			`form:"id" json:"id"`
+	Username  	string		`form:"code" json:"code"`
+	Password  	string		`form:"name" json:"name"`
+	ID    		int			`form:"id" json:"id"`
+	Username  	string		`form:"code" json:"code"`
+	Password  	string		`form:"name" json:"name"`
+	 */
+	//Price decimal.Decimal `form:"price" json:"price" sql:"type:decimal(16,2);"`
 }
 
-// Result is an array of product
+// Result is an array of mahasiswa
 type Result struct {
 	Code    int         `json:"code"`
 	Data    interface{} `json:"data"`
@@ -41,7 +48,7 @@ func main() {
 		log.Println("Connection established")
 	}
 
-	db.AutoMigrate(&Product{})
+	db.AutoMigrate(&Mahasiswa{})
 	handleRequests()
 }
 
@@ -69,11 +76,11 @@ func handleRequests() {
 	})
 
 	myRouter.HandleFunc("/", homePage)
-	myRouter.HandleFunc("/api/products", createProduct).Methods("POST")
-	myRouter.HandleFunc("/api/products", getProducts).Methods("GET")
-	myRouter.HandleFunc("/api/products/{id}", getProduct).Methods("GET")
-	myRouter.HandleFunc("/api/products/{id}", updateProduct).Methods("PUT")
-	myRouter.HandleFunc("/api/products/{id}", deleteProduct).Methods("DELETE")
+	myRouter.HandleFunc("/api/mahasiswas", createMahasiswa).Methods("POST")
+	myRouter.HandleFunc("/api/mahasiswas", getMahasiswa).Methods("GET")
+	myRouter.HandleFunc("/api/mahasiswas/{id}", getMahasiswa).Methods("GET")
+	myRouter.HandleFunc("/api/mahasiswas/{id}", updateMahasiswa).Methods("PUT")
+	myRouter.HandleFunc("/api/mahasiswas/{id}", deleteMahasiswa).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":9999", myRouter))
 }
@@ -85,12 +92,12 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 func createProduct(w http.ResponseWriter, r *http.Request) {
 	payloads, _ := ioutil.ReadAll(r.Body)
 
-	var product Product
-	json.Unmarshal(payloads, &product)
+	var mahasiswa Mahasiswa
+	json.Unmarshal(payloads, &mahasiswa)
 
-	db.Create(&product)
+	db.Create(&mahasiswa)
 
-	res := Result{Code: 200, Data: product, Message: "Success create product"}
+	res := Result{Code: 200, Data: mahasiswa, Message: "Success create mahasiswa"}
 	result, err := json.Marshal(res)
 
 	if err != nil {
@@ -103,12 +110,12 @@ func createProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func getProducts(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Endpoint hit: get products")
+	fmt.Println("Endpoint hit: get mahasiswas")
 
-	products := []Product{}
-	db.Find(&products)
+	mahasiswas := []Mahasiswa{}
+	db.Find(&mahasiswas)
 
-	res := Result{Code: 200, Data: products, Message: "Success get products"}
+	res := Result{Code: 200, Data: mahasiswas, Message: "Success get mahasiswas"}
 	results, err := json.Marshal(res)
 
 	if err != nil {
@@ -120,15 +127,15 @@ func getProducts(w http.ResponseWriter, r *http.Request) {
 	w.Write(results)
 }
 
-func getProduct(w http.ResponseWriter, r *http.Request) {
+func getMahasiswa(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	productID := vars["id"]
+	mahasiswaID := vars["id"]
 
-	var product Product
+	var mahasiswa Mahasiswa
 
-	db.First(&product, productID)
+	db.First(&mahasiswa, mahasiswaID)
 
-	res := Result{Code: 200, Data: product, Message: "Success get product"}
+	res := Result{Code: 200, Data: mahasiswa, Message: "Success get mahasiswa"}
 	result, err := json.Marshal(res)
 
 	if err != nil {
@@ -140,20 +147,20 @@ func getProduct(w http.ResponseWriter, r *http.Request) {
 	w.Write(result)
 }
 
-func updateProduct(w http.ResponseWriter, r *http.Request) {
+func updateMahasiswa(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	productID := vars["id"]
+	mahasiswaID := vars["id"]
 
 	payloads, _ := ioutil.ReadAll(r.Body)
 
-	var productUpdates Product
-	json.Unmarshal(payloads, &productUpdates)
+	var mahasiswaUpdates Mahasiswa
+	json.Unmarshal(payloads, &mahasiswaUpdates)
 
-	var product Product
-	db.First(&product, productID)
-	db.Model(&product).Updates(productUpdates)
+	var mahasiswa Mahasiswa
+	db.First(&mahasiswa, mahasiswaID)
+	db.Model(&mahasiswa).Updates(mahasiswaUpdates)
 
-	res := Result{Code: 200, Data: product, Message: "Success update product"}
+	res := Result{Code: 200, Data: mahasiswa, Message: "Success update mahasiswa"}
 	result, err := json.Marshal(res)
 
 	if err != nil {
@@ -165,16 +172,16 @@ func updateProduct(w http.ResponseWriter, r *http.Request) {
 	w.Write(result)
 }
 
-func deleteProduct(w http.ResponseWriter, r *http.Request) {
+func deleteMahasiswa(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	productID := vars["id"]
+	mahasiswaID := vars["id"]
 
-	var product Product
+	var mahasiswa Mahasiswa
 
-	db.First(&product, productID)
-	db.Delete(&product)
+	db.First(&mahasiswa, mahasiswaID)
+	db.Delete(&mahasiswa)
 
-	res := Result{Code: 200, Message: "Success delete product"}
+	res := Result{Code: 200, Message: "Success delete mahasiswa"}
 	result, err := json.Marshal(res)
 
 	if err != nil {
