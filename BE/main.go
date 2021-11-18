@@ -77,7 +77,7 @@ func handleRequests() {
 
 	myRouter.HandleFunc("/", homePage)
 	myRouter.HandleFunc("/api/mahasiswas", createMahasiswa).Methods("POST")
-	myRouter.HandleFunc("/api/mahasiswas", getMahasiswa).Methods("GET")
+	myRouter.HandleFunc("/api/mahasiswas", getMahasiswas).Methods("GET")
 	myRouter.HandleFunc("/api/mahasiswas/{id}", getMahasiswa).Methods("GET")
 	myRouter.HandleFunc("/api/mahasiswas/{id}", updateMahasiswa).Methods("PUT")
 	myRouter.HandleFunc("/api/mahasiswas/{id}", deleteMahasiswa).Methods("DELETE")
@@ -89,7 +89,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Welcome!")
 }
 
-func createProduct(w http.ResponseWriter, r *http.Request) {
+func createMahasiswa(w http.ResponseWriter, r *http.Request) {
 	payloads, _ := ioutil.ReadAll(r.Body)
 
 	var mahasiswa Mahasiswa
@@ -109,7 +109,7 @@ func createProduct(w http.ResponseWriter, r *http.Request) {
 	w.Write(result)
 }
 
-func getProducts(w http.ResponseWriter, r *http.Request) {
+func getMahasiswas(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint hit: get mahasiswas")
 
 	mahasiswas := []Mahasiswa{}
