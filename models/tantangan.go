@@ -1,6 +1,6 @@
 package models
 
-type CreateTantanganParams struct {
+type Tantangan struct {
 	ID                int    `gorm:"primary_key"json:"id"`
 	JudulTantangan    string `json:"judul_tantangan"`
 	Tema              string `json:"tema"`

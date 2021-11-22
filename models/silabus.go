@@ -1,6 +1,6 @@
 package models
 
-type CreateSilabusParams struct {
+type Silabus struct {
 	ID              int    `gorm:"primary_key"json:"id"`
 	JudulSilabus    string `json:"judul_silabus"`
 	Definisi        string `json:"definisi"`

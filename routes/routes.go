@@ -34,5 +34,12 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	authorized.PUT("/api/admin/:id", controller.UpdateAdmin)
 	authorized.DELETE("/api/admin/:id", controller.DeleteAdmin)
 
+	//route tantangan
+	r.GET("/api/tantangan", controller.GetAllTantangan)
+	authorized.POST("/api/tantangan", controller.CreateTantangan)
+	r.GET("/api/tantangan/:id", controller.GetTantanganId)
+	authorized.PUT("/api/tantangan/:id", controller.UpdateTantangan)
+	authorized.DELETE("/api/tantangan/:id", controller.DeleteTantangan)
+
 	return r
 }
