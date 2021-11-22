@@ -9,9 +9,9 @@ import (
 )
 
 //Get
-func GetAllTantangan(c *gin.Context) {
+func GetAllLeaderboard(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	var ttgn []models.Tantangan
+	var ttgn []models.Leaderboard
 
 	db.Find(&ttgn)
 
@@ -19,8 +19,8 @@ func GetAllTantangan(c *gin.Context) {
 }
 
 //Create
-func CreateTantangan(c *gin.Context) {
-	var input models.Tantangan
+func CreateLeaderboard(c *gin.Context) {
+	var input models.Leaderboard
 
 	//JSON Check
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -28,9 +28,9 @@ func CreateTantangan(c *gin.Context) {
 		return
 	}
 
-	// create Tantangan
-	ttgn := models.Tantangan{
-		JudulTantangan: input.JudulTantangan, Tema: input.Tema, Latar: input.Latar, UrlVideoTantangan: input.UrlVideoTantangan, TaskTantangan: input.TaskTantangan, UjianTantangan: input.UjianTantangan, SkorTantangan: input.SkorTantangan, IDAdmin: input.IDAdmin}
+	// create Leaderboard
+	ttgn := models.Leaderboard{
+		JudulLeaderboard: input.JudulLeaderboard, Tema: input.Tema, Latar: input.Latar, UrlVideoLeaderboard: input.UrlVideoLeaderboard, TaskLeaderboard: input.TaskLeaderboard, UjianLeaderboard: input.UjianLeaderboard, SkorLeaderboard: input.SkorLeaderboard, IDAdmin: input.IDAdmin}
 	db := c.MustGet("db").(*gorm.DB)
 	db.Create(&ttgn)
 
@@ -38,9 +38,9 @@ func CreateTantangan(c *gin.Context) {
 }
 
 //GetByID
-func GetTantanganId(c *gin.Context) {
+func GetLeaderboardId(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	var ttgn models.Tantangan
+	var ttgn models.Leaderboard
 
 	if err := db.Where("id = ?", c.Param("id")).First(&ttgn).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"data": "Record Not Found"})
@@ -50,10 +50,10 @@ func GetTantanganId(c *gin.Context) {
 }
 
 //Update
-func UpdateTantangan(c *gin.Context) {
-	var input models.Tantangan
-	var ttgn models.Tantangan
-	var updatedInput models.Tantangan
+func UpdateLeaderboard(c *gin.Context) {
+	var input models.Leaderboard
+	var ttgn models.Leaderboard
+	var updatedInput models.Leaderboard
 	db := c.MustGet("db").(*gorm.DB)
 
 	// JSON Check
@@ -67,13 +67,13 @@ func UpdateTantangan(c *gin.Context) {
 		return
 	}
 	// Update Data Hasil Input
-	updatedInput.JudulTantangan = input.JudulTantangan
+	updatedInput.JudulLeaderboard = input.JudulLeaderboard
 	updatedInput.Tema = input.Tema
 	updatedInput.Latar = input.Latar
-	updatedInput.UrlVideoTantangan = input.UrlVideoTantangan
-	updatedInput.TaskTantangan = input.TaskTantangan
-	updatedInput.UjianTantangan = input.UjianTantangan
-	updatedInput.SkorTantangan = input.SkorTantangan
+	updatedInput.UrlVideoLeaderboard = input.UrlVideoLeaderboard
+	updatedInput.TaskLeaderboard = input.TaskLeaderboard
+	updatedInput.UjianLeaderboard = input.UjianLeaderboard
+	updatedInput.SkorLeaderboard = input.SkorLeaderboard
 	updatedInput.IDAdmin = input.IDAdmin
 
 	db.Model(&ttgn).Updates(updatedInput)
@@ -82,9 +82,9 @@ func UpdateTantangan(c *gin.Context) {
 }
 
 // Delete
-func DeleteTantangan(c *gin.Context) {
+func DeleteLeaderboard(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	var ttgn models.Tantangan
+	var ttgn models.Leaderboard
 
 	if err := db.Where("id = ?", c.Param("id")).First(&ttgn).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"data": "Record Not Found"})
