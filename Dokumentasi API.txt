@@ -1,0 +1,27 @@
+// POST Login
+"localhost:8080/user/Login"
+Yang di input user hanya antara email dan nomorhp dan password aja
+{
+    "email":"rafli@gmail.com",
+    "nomorhp":13215,
+    "password":"inipassword",
+}
+// Ini cuman detail kalau dimasukkin blm lengkap
+{
+    "email":"rafli@gmail.com",
+    "nomorhp":13215,
+    "username:"rafli"
+    "password":"inipassword",
+}
+
+// Post Tantangan
+"localhost:8080/admin/tantangan"
+{
+    "judul_tantangan":"Algoritma",
+    "tema":"logika",
+    "latar":"buku",
+    "url_video_tantangan":"ini_video_url",
+    "task_tantangan":"Kerjakan yah",
+    "ujian_tantangan":"Ini ujian",
+    "skor_tantangan":20
+}

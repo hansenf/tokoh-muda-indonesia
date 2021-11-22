@@ -1,16 +1,36 @@
 package main
 
 import (
-	"tmi/config"
-	"tmi/routes"
+	"fmt"
+	"log"
+	"net/http"
+	"tmi-native/config"
+	"tmi-native/controller"
+	client "tmi-native/db"
+	sqlClient "tmi-native/db/sqlc"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
-	db := config.ConnectDatabase()
-	sqlDB, _ := db.DB()
+	db, e := config.MySQL()
 
-	defer sqlDB.Close()
+	if e != nil {
+		log.Fatal(e)
+	}
 
-	r := routes.SetupRouter(db)
-	r.Run()
+	eb := db.Ping()
+	if eb != nil {
+		panic(eb.Error())
+	}
+
+	client.DB = sqlClient.New(db)
+	fmt.Println("Success")
+	router := httprouter.New()
+	router.POST("/admin/tantangan", controller.PostTantangan)
+	router.POST("/admin/silabus", controller.PostSilabus)
+	router.POST("/user/register", controller.PostUsers)
+	router.POST("/user/login", controller.GetUserByEmailAndPassword)
+	router.GET("/user/cek-user/:id", controller.GetUsersByID)
+	log.Fatal(http.ListenAndServe(":8080", router))
 }

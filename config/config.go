@@ -1,29 +1,43 @@
 package config
 
 import (
-	"tmi/models"
+	"database/sql"
+	"fmt"
+	"os"
 
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	_ "github.com/go-sql-driver/mysql"
 )
 
-func ConnectDatabase() *gorm.DB {
-	/*
-		username := "postgres"
-		password := "12345678"
-		host := "tcp(127.0.0.1:5432)"
-		database := "db_jcc_tmi"
-	*/
-	dsn := "host=localhost user=postgres password=12345678 dbname=db_jcc_tmi port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	//dsn := fmt.Sprintf("%v:%v@%v/%v?charset=utf8mb4&parseTime=True&loc=Local", username, password, host, database)
+const (
+	localUsername string = "root"
+	localPassword string = ""
+	localDatabase string = "tmi"
+)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+var (
+	username string = os.Getenv("DB_USERNAME")
+	password string = os.Getenv("DB_PASSWORD")
+	database string = os.Getenv("DB_DATABASE")
+	host     string = os.Getenv("DB_HOST")
+	port     string = os.Getenv("DB_PORT")
+)
+
+var (
+	dsn string
+)
+
+// HubToMySQL
+func MySQL() (*sql.DB, error) {
+	if host == "" {
+		dsn = fmt.Sprintf("%v:%v@/%v?parseTime=true", localUsername, localPassword, localDatabase)
+	} else {
+		dsn = fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?parseTime=true", username, password, host, port, database)
+	}
+	db, err := sql.Open("mysql", dsn)
 
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
-	db.AutoMigrate(&models.Mahasiswa{})
-
-	return db
+	return db, nil
 }
