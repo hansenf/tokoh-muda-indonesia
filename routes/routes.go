@@ -57,5 +57,19 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	authorized.PUT("/api/tantangan/:id", controller.UpdateTantangan)
 	authorized.DELETE("/api/tantangan/:id", controller.DeleteTantangan)
 
+	//route leaderboard
+	r.GET("/api/leaderboard", controller.GetAllLeaderboard)
+	authorized.POST("/api/leaderboard", controller.CreateLeaderboard)
+	r.GET("/api/leaderboard/:id", controller.GetLeaderboardId)
+	authorized.PUT("/api/leaderboard/:id", controller.UpdateSilabus)
+	authorized.DELETE("/api/leaderboard/:id", controller.DeleteSilabus)
+
+	//route silabus
+	r.GET("/api/silabus", controller.GetAllSilabus)
+	authorized.POST("/api/silabus", controller.CreateSilabus)
+	r.GET("/api/silabus/:id", controller.GetSilabusID)
+	authorized.PUT("/api/silabus/:id", controller.UpdateLeaderboard)
+	authorized.DELETE("/api/silabus/:id", controller.DeleteLeaderboard)
+
 	return r
 }
